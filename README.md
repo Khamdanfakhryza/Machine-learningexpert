@@ -59,6 +59,18 @@ Dataset ini dapat diakses menggunakan [Kaggle](https://www.kaggle.com/datasets/f
 11. ST_Slope: Kemiringan ST (kategorikal).
 12. HeartDisease: Target variabel (0 atau 1, menunjukkan ada tidaknya penyakit jantung).
 
+**Korelasi Matrik**
+
+![Screenshot 2024-10-14 130304](https://github.com/user-attachments/assets/aebf273d-4458-4eae-af34-ea1628efe020)
+
+Matriks korelasi yang ditampilkan membantu dalam memahami seberapa kuat hubungan antara fitur numerik yang digunakan dalam model prediksi. Beberapa poin penting yang bisa dimasukkan dalam evaluasi adalah:
+
+- Korelasi Antara Fitur: Berdasarkan analisis matriks, terlihat bahwa fitur Age (usia) menunjukkan korelasi positif terhadap Oldpeak (0.3) dan korelasi negatif terhadap MaxHR (-0.38). Hal ini mengindikasikan bahwa dengan bertambahnya usia, nilai Oldpeak cenderung meningkat sementara nilai MaxHR mengalami penurunan. Temuan ini bisa menjadi indikator penting dalam memperkirakan risiko penyakit jantung. Di sisi lain, RestingBP (tekanan darah saat istirahat) menunjukkan korelasi yang rendah dengan fitur lainnya, mengindikasikan bahwa meskipun mungkin tidak memiliki dampak signifikan terhadap fitur numerik lain, tekanan darah ini tetap dapat relevan dalam memprediksi hasil akhir.
+- Korelasi yang Minimal: Beberapa fitur seperti Cholesterol dan RestingBP menunjukkan korelasi yang sangat lemah dengan fitur lainnya, contohnya, korelasi antara Cholesterol dan MaxHR mendekati angka 0. Hal ini mengisyaratkan bahwa fitur-fitur tersebut mungkin tidak memiliki pengaruh besar terhadap prediksi langsung. Namun, masih perlu dipertimbangkan relevansinya untuk tetap ada dalam model atau kemungkinan dihapus selama proses seleksi fitur.
+Penghapusan Fitur yang Tidak Relevan: Saya telah menghapus fitur FastingBS dan MaxHR dari dataset, yang mungkin disebabkan oleh rendahnya korelasi atau ketidaksignifikanannya terhadap fitur lain. Langkah ini merupakan bagian dari seleksi fitur yang tepat untuk meningkatkan performa model dengan cara mengurangi kompleksitas tanpa mengorbankan akurasi.
+
+![image](https://github.com/user-attachments/assets/eac4ceb4-1842-49cd-a02f-19d28164325d)
+
 ### Data Loading
 Data_Jantung = pd.read_csv perintah ini digunakan untuk membaca data dengan format csv. kemudian ditampikan dengan memanggil kelas Data_Jantung, juga bisa menggunakan Data_Jantung.head() jika hanya ingin menampilkan 5 baris data
 
@@ -119,7 +131,13 @@ Di dalam gamabr, pada beberapa fitur numerik yang terdapat outliers. Untuk menga
 Untuk melakukan proses encoding fitur kategori, salah satu teknik yang umum dilakukan adalah teknik one-hot-encoding.
 
 ###Tahap Split Data:
-Dataset dibagi menjadi data pelatihan dan data pengujian dengan proporsi 90:10 menggunakan fungsi train_test_split dari sklearn.model_selection. Data pelatihan digunakan untuk melatih model, sementara data pengujian digunakan untuk mengevaluasi kinerja model.
+- Proporsi Pembagian Data (90:10): Dataset dibagi menjadi 90% data pelatihan dan 10% data pengujian menggunakan fungsi train_test_split dari modul sklearn.model_selection. Pembagian ini berarti 90% dari data akan digunakan untuk melatih model dan mengoptimalkan parameter, sementara 10% sisanya akan digunakan untuk menguji kemampuan model dalam melakukan generalisasi terhadap data baru yang belum pernah dilihat oleh model.
+
+- Tujuan Pembagian Dataset:
+    - Data Pelatihan (Training Set): Bagian ini digunakan untuk melatih model. Selama proses pelatihan, algoritma machine learning mempelajari pola dari data pelatihan dan mengoptimalkan parameter model agar dapat memprediksi output dengan akurasi tinggi.
+    - Data Pengujian (Testing Set): Bagian ini digunakan untuk mengevaluasi kinerja model setelah pelatihan. Evaluasi pada data pengujian memberikan indikasi seberapa baik model dapat menggeneralisasi atau memprediksi data baru. Data pengujian membantu mengidentifikasi masalah seperti overfitting, di mana model terlalu menyesuaikan diri dengan data pelatihan dan kurang mampu memprediksi data yang tidak dikenal.
+    - Random State untuk Reproduksibilitas: Untuk memastikan hasil pembagian dataset konsisten setiap kali kode dijalankan, parameter random_state dapat ditetapkan pada fungsi train_test_split. Ini memungkinkan eksperimen yang dapat direproduksi dan hasil evaluasi yang konsisten.
+    - Stratifikasi untuk Fitur Target (Opsional): Jika dataset memiliki distribusi kelas yang tidak seimbang pada fitur target, parameter stratify dapat digunakan saat membagi data untuk mempertahankan distribusi yang sama pada kedua subset. Ini membantu dalam mengevaluasi kinerja model yang lebih adil, terutama pada masalah klasifikasi.
 
 ###Urutan Tahapan:
 Pastikan untuk menjelaskan setiap tahap secara runtut sesuai dengan notebook:
@@ -155,18 +173,6 @@ _Batas atas = Q3 + 1.5 * IQR_
 setelah itu untuk melihat ukuran hasil penanganan _outliers_, variabel _insurance_ dapat dipanggil dengan __data_jantung.shape__ lalu akan ditampilkan hasil penanganan _outliers_
 
 ![image](https://github.com/user-attachments/assets/9050ddcc-c2e4-4cf5-86c9-50bd09724b73)
-
-**Korelasi Matrik**
-
-![Screenshot 2024-10-14 130304](https://github.com/user-attachments/assets/aebf273d-4458-4eae-af34-ea1628efe020)
-
-Matriks korelasi yang ditampilkan membantu dalam memahami seberapa kuat hubungan antara fitur numerik yang digunakan dalam model prediksi. Beberapa poin penting yang bisa dimasukkan dalam evaluasi adalah:
-
-- Korelasi Antara Fitur: Berdasarkan analisis matriks, terlihat bahwa fitur Age (usia) menunjukkan korelasi positif terhadap Oldpeak (0.3) dan korelasi negatif terhadap MaxHR (-0.38). Hal ini mengindikasikan bahwa dengan bertambahnya usia, nilai Oldpeak cenderung meningkat sementara nilai MaxHR mengalami penurunan. Temuan ini bisa menjadi indikator penting dalam memperkirakan risiko penyakit jantung. Di sisi lain, RestingBP (tekanan darah saat istirahat) menunjukkan korelasi yang rendah dengan fitur lainnya, mengindikasikan bahwa meskipun mungkin tidak memiliki dampak signifikan terhadap fitur numerik lain, tekanan darah ini tetap dapat relevan dalam memprediksi hasil akhir.
-- Korelasi yang Minimal: Beberapa fitur seperti Cholesterol dan RestingBP menunjukkan korelasi yang sangat lemah dengan fitur lainnya, contohnya, korelasi antara Cholesterol dan MaxHR mendekati angka 0. Hal ini mengisyaratkan bahwa fitur-fitur tersebut mungkin tidak memiliki pengaruh besar terhadap prediksi langsung. Namun, masih perlu dipertimbangkan relevansinya untuk tetap ada dalam model atau kemungkinan dihapus selama proses seleksi fitur.
-Penghapusan Fitur yang Tidak Relevan: Saya telah menghapus fitur FastingBS dan MaxHR dari dataset, yang mungkin disebabkan oleh rendahnya korelasi atau ketidaksignifikanannya terhadap fitur lain. Langkah ini merupakan bagian dari seleksi fitur yang tepat untuk meningkatkan performa model dengan cara mengurangi kompleksitas tanpa mengorbankan akurasi.
-
-![image](https://github.com/user-attachments/assets/eac4ceb4-1842-49cd-a02f-19d28164325d)
 
 **One Hot Encoding**
 
