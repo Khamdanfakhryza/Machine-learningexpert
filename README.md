@@ -154,58 +154,17 @@ Pastikan untuk menjelaskan setiap tahap secara runtut sesuai dengan notebook:
 - Split Data: Memisahkan dataset menjadi data pelatihan dan pengujian
 
 **Menangani Outlier**
-```sh
-# Select only numerical features for outlier removal
-numerical_features = data_jantung.select_dtypes(include=['number']).columns
+Dalam proyek ini, penanganan outliers dilakukan menggunakan metode Interquartile Range (IQR). Proses ini dimulai dengan mendefinisikan batas bawah dan batas atas untuk mengidentifikasi nilai-nilai ekstrem dalam dataset. Batas bawah ditentukan oleh kuartil pertama (Q1) dan batas atas oleh kuartil ketiga (Q3). IQR dihitung dengan mengurangkan Q1 dari Q3, yang memberikan rentang interkuartil.
 
-Q1 = data_jantung[numerical_features].quantile(0.25)
-Q3 = data_jantung[numerical_features].quantile(0.75)
-IQR = Q3 - Q1
-
-# Apply outlier removal logic only to numerical features
-data_jantung = data_jantung[~((data_jantung[numerical_features] < (Q1 - 1.5 * IQR)) | (data_jantung[numerical_features] > (Q3 + 1.5 * IQR))).any(axis=1)]
-
-# Cek ukuran dataset setelah kita drop outliers
-data_jantung.shape
-```
-
-Pada proyek ini digunakan IQR method  untuk menangani _outliers_ yang pertama definisikan dulu _outliers_ pada Q1 atau batas bawah yaitu 0.25 lalu _outliers_ pada Q3 atau batas atas  yaitu 0.75 
-kemudian hasil Q3 akan dikurangi dengan hasil Q1 setelah itu buat variabel baru yaitu _data_jantung_  untuk menampung hasil batas bawah dari pengurangan Q1 dengan 1,5 * IQR. lalu untuk hasil batas atas digunakan penambahan 1.5 * IQR dengan Q3
-
-dan jika dibuat persamaan dapat dilihat sebagai berikut :
-***
-_Batas bawah = Q1 - 1.5 * IQR_
-_Batas atas = Q3 + 1.5 * IQR_
-***
-setelah itu untuk melihat ukuran hasil penanganan _outliers_, variabel _insurance_ dapat dipanggil dengan __data_jantung.shape__ lalu akan ditampilkan hasil penanganan _outliers_
+Setelah batas ini ditentukan, data yang berada di luar rentang tersebut akan dihapus dari dataset. Hasilnya, ukuran dataset yang telah diproses dapat diperiksa untuk memastikan bahwa outliers telah berhasil dihapus. Penanganan outliers ini penting untuk meningkatkan kualitas data dan akurasi model prediksi, karena keberadaan outliers dapat mempengaruhi hasil analisis secara signifikan.
 
 ![image](https://github.com/user-attachments/assets/9050ddcc-c2e4-4cf5-86c9-50bd09724b73)
 
 **One Hot Encoding**
 
-```sh
-from sklearn.preprocessing import OneHotEncoder
-# Melakukan One-Hot Encoding pada kolom 'Sex'
-data_jantung = pd.concat([data_jantung, pd.get_dummies(data_jantung['Sex'], prefix='Sex')], axis=1)
-
-# Melakukan One-Hot Encoding pada kolom 'ChestPainType'
-data_jantung = pd.concat([data_jantung, pd.get_dummies(data_jantung['ChestPainType'], prefix='ChestPainType')], axis=1)
-
-# Melakukan One-Hot Encoding pada kolom 'RestingECG'
-data_jantung = pd.concat([data_jantung, pd.get_dummies(data_jantung['RestingECG'], prefix='RestingECG')], axis=1)
-
-# Melakukan One-Hot Encoding pada kolom 'ExerciseAngina'
-data_jantung = pd.concat([data_jantung, pd.get_dummies(data_jantung['ExerciseAngina'], prefix='ExerciseAngina')], axis=1)
-
-# Melakukan One-Hot Encoding pada kolom 'ST_Slope'
-data_jantung = pd.concat([data_jantung, pd.get_dummies(data_jantung['ST_Slope'], prefix='ST_Slope')], axis=1)
-
-# Menghapus kolom asli yang sudah di-encode
-data_jantung.drop(['Sex', 'ChestPainType', 'RestingECG', 'ExerciseAngina', 'ST_Slope'], axis=1, inplace=True)
-
-# Melihat data setelah encoding
-data_jantung.head()
-```
+- One Hot Encoding adalah teknik yang digunakan untuk mengubah variabel kategorikal menjadi format numerik agar dapat digunakan dalam model machine learning. Dalam konteks proyek ini, beberapa kolom kategorikal dalam dataset, seperti 'Sex', 'ChestPainType', 'RestingECG', 'ExerciseAngina', dan 'ST_Slope', telah diubah menggunakan metode ini.
+- Proses One Hot Encoding menghasilkan kolom baru untuk setiap kategori unik dalam kolom yang di-encode. Misalnya, kolom 'Sex' yang memiliki dua kategori (Pria dan Wanita) diubah menjadi dua kolom baru: 'Sex_F' dan 'Sex_M', yang masing-masing menunjukkan apakah individu tersebut adalah wanita atau pria. Demikian pula, kolom 'ChestPainType' yang memiliki beberapa jenis nyeri dada juga diubah menjadi beberapa kolom baru yang mencerminkan masing-masing tipe nyeri dada.
+- Setelah melakukan encoding, kolom asli yang tidak lagi diperlukan dihapus dari dataset untuk menghindari redundansi. Hasil akhirnya adalah dataset yang lebih siap untuk analisis dan pemodelan, di mana semua fitur kategorikal telah dikonversi menjadi format numerik yang dapat dimengerti oleh algoritma machine learning. Dengan demikian, One Hot Encoding membantu meningkatkan performa model dengan memastikan bahwa semua informasi yang relevan tersedia dalam format yang tepat.
 
 | Age | RestingBP | Cholesterol | Oldpeak | HeartDisease | Sex_F | Sex_M | ChestPainType_ASY  | ChestPainType_ATA  | ChestPainType_NAP  | ChestPainType_TA | RestingECG_LVH | RestingECG_Normal | RestingECG_ST | ExerciseAngina_N  | ExerciseAngina_Y | ST_Slope_Down  | ST_Slope_Flat  | ST_Slope_Up |
 |-----|-----------|-------------|---------|--------------|-------|-------|--------------------|--------------------|--------------------|------------------|----------------|-------------------|---------------|-------------------|------------------|----------------|----------------|-------------|
