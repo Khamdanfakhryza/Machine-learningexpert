@@ -1,469 +1,321 @@
-# Laporan Proyek Machine Learning - Khamdan Annas Fakhryza
-## _Proyek Pertama_
+## Laporan Proyek Machine Learning _ Khamdan Annas Fakhryza
+***
 
-# Domain Proyek
-### Latar Belakang
-Penyakit jantung merupakan salah satu penyebab utama kematian di seluruh dunia. Setiap tahunnya, jutaan orang mengalami gangguan kesehatan serius yang berkaitan dengan jantung, seperti serangan jantung dan gagal jantung. Di Indonesia, penyakit jantung menjadi salah satu penyebab kematian tertinggi, terutama pada kelompok usia lanjut, yang menunjukkan urgensi deteksi dini untuk faktor-faktor risiko penyakit jantung.
+## Project Overview
 
-Faktor risiko seperti usia, tekanan darah, kadar kolesterol, kebiasaan merokok, indeks massa tubuh (BMI), dan riwayat diabetes, memiliki peran penting dalam memprediksi potensi terjadinya penyakit jantung. Mengingat banyaknya faktor risiko yang harus dipertimbangkan, memprediksi penyakit jantung secara manual menjadi tugas yang rumit dan rentan terhadap kesalahan.
+Membaca buku adalah kegiatan yang sangat penting untuk memperoleh ilmu pengetahuan, tetapi dengan banyaknya jumlah buku yang tersedia, pembaca dapat kebingungan memilih buku yang relevan. Untuk mengatasi permasalahan ini, proyek ini membangun sebuah sistem rekomendasi berbasis konten (*content-based filtering*) yang merekomendasikan buku berdasarkan fitur seperti kategori, penulis, dan judul. Dengan menggunakan pendekatan ini, sistem rekomendasi diharapkan dapat membantu pembaca menemukan buku yang sesuai dengan minat mereka.
 
-Dengan kemajuan teknologi dalam kecerdasan buatan (AI) dan pembelajaran mesin (ML), terdapat peluang untuk meningkatkan kemampuan prediksi risiko penyakit jantung secara lebih cepat dan akurat. Penggunaan model machine learning dapat membantu tenaga medis dalam memberikan diagnosis yang lebih baik berdasarkan data kesehatan pasien, yang pada akhirnya dapat meningkatkan upaya pencegahan dan pengobatan.
+## Business Understanding
+***
 
-Dalam proyek ini, dikembangkan sistem prediksi risiko penyakit jantung berbasis machine learning menggunakan berbagai model seperti K-Nearest Neighbor (KNN), Random Forest, Gradient Boosting, dan Support Vector Machine (SVM). Dengan memanfaatkan data medis seperti tekanan darah, kadar kolesterol, dan riwayat kesehatan pasien, sistem ini diharapkan dapat membantu mengidentifikasi risiko penyakit jantung secara lebih efektif, sehingga dapat mengurangi angka kematian dan meningkatkan kualitas hidup pasien melalui deteksi dan intervensi dini.
-
-# Business Understanding
 ### Problem Statements
-- Pernyataan Masalah 1:
-  Meningkatnya prevalensi penyakit jantung menjadikannya salah satu penyebab utama kematian di seluruh dunia. Penting untuk mengidentifikasi individu yang berisiko tinggi secara dini untuk pencegahan yang efektif.
-- Pernyataan Masalah 2:
-  Tingginya variasi dalam data kesehatan pasien seringkali menyebabkan kesalahan dalam prediksi risiko penyakit jantung. Oleh karena itu, diperlukan pendekatan berbasis machine learning untuk meningkatkan akurasi prediksi risiko.
-- Pernyataan Masalah 3:
-  Diperlukan evaluasi performa berbagai model machine learning, seperti KNN, Random Forest, Adaboost, dan SVM, untuk menemukan model yang paling optimal dalam memprediksi risiko penyakit jantung dengan akurat.
+1. Bagaimana membuat sistem rekomendasi yang efektif untuk membantu pengguna dalam memilih buku yang sesuai dengan preferensi mereka?
+2. Metode apa yang cocok digunakan untuk merekomendasikan buku berdasarkan fitur-fitur seperti genre, penulis, dan penerbit?
 
 ### Goals
-- Jawaban Pernyataan Masalah 1:
-  Mengembangkan model prediksi risiko penyakit jantung untuk membantu pencegahan dini serta mendukung penanganan yang lebih efektif berdasarkan data kesehatan pasien.
-- Jawaban Pernyataan Masalah 2:
-  Menerapkan teknik machine learning untuk menangani data kesehatan pasien yang bervariasi, dengan tujuan meningkatkan akurasi prediksi risiko penyakit jantung.
-- Jawaban Pernyataan Masalah 3:
-  Membandingkan performa algoritma KNN, Random Forest, Adaboost, dan SVM, untuk menemukan model terbaik yang memberikan prediksi risiko penyakit jantung paling akurat dan andal.
+1. Mengembangkan sistem rekomendasi buku berbasis konten yang dapat memberikan rekomendasi sesuai preferensi pengguna.
+2. Menyediakan rekomendasi buku yang relevan dengan memanfaatkan fitur-fitur yang tersedia pada data buku.
+
+### Solution Statement
+Solusi yang diterapkan dalam proyek ini adalah menggunakan pendekatan *content-based filtering* dengan algoritma *cosine similarity*. Pendekatan ini menghitung kesamaan antar buku berdasarkan fitur-fitur seperti kategori, penulis, judul, dan penerbit untuk merekomendasikan buku yang mirip dengan buku yang pernah disukai atau dibaca oleh pengguna.
+
+## Data Understanding
+***
+
+Dataset yang digunakan dapat diakses melalui [kaggle](https://www.kaggle.com/datasets/ruchi798/bookcrossing-dataset).  
+Informasi dari dataset dapat dilihat di Tabel 1.  
+
+**Tabel 1. Rangkuman informasi Dataset**
+
+| Jenis                  | Keterangan                                                                                                        |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| Sumber                 | [Book-Crossing: User review ratings](https://www.kaggle.com/datasets/ruchi798/bookcrossing-dataset)               |
+| Lisensi                | [CC0: Public Domain](https://creativecommons.org/publicdomain/zero/1.0/)                                          |
+| Kategori               | Arts and Entertainment, Online Communities, Literature                                                            |
+| Jenis & Ukuran berkas  | ZIP (600.34 MB)                                                                                                   |  
+
+Setelah melakukan observasi pada dataset yang diunduh, didapat informasi sebagai berikut:
+- Terdapat 1.031.175 baris dalam dataset.
+- Terdapat 19 kolom dan detail pembahasan ada di bawah ini.
+
+Penjelasan mengenai 19 kolom tersebut adalah sebagai berikut:  
+- `user_id`: ID dari pengguna.
+- `location`: Lokasi/alamat pengguna.
+- `age`: Umur pengguna.
+- `isbn`: Kode ISBN (International Standard Book Number) buku.
+- `rating`: Rating dari buku.
+- `book_title`: Judul buku.
+- `book_author`: Penulis buku.
+- `year_of_publication`: Tahun terbit buku.
+- `publisher`: Penerbit buku.
+- `img_s`: Gambar sampul buku (ukuran kecil).
+- `img_m`: Gambar sampul buku (ukuran sedang).
+- `img_l`: Gambar sampul buku (ukuran besar).
+- `summary`: Ringkasan/sinopsis buku.
+- `language`: Bahasa yang digunakan buku.
+- `category`: Kategori buku.
+- `city`: Kota pengguna.
+- `state`: Negara bagian pengguna.
+- `country`: Negara pengguna.
+
+### Data Exploration
+**Tabel 2. Sample Data**
+
+| Unnamed: 0 | user_id | location | age | isbn | rating | book_title | book_author | year_of_publication | publisher | img_s | img_m | img_l | summary | language | category | city | state | country |  
+| ------------ | ------------ | ------------ | ------------ | ------------ | ------------ | ------------ | ------------ | ------------ | ------------ | ------------ | ------------ | ------------ | ------------ | ------------ | ------------ | ------------ | ------------ | ------------ | 
+| 0 | 0 | 2 | stockton, california, usa | 18 | 0195153448 | 0 | Classical Mythology | 2002 | Oxford University Press | http://images.amazon.com/images/P/0195153448.0... | http://images.amazon.com/images/P/0195153448.0... | http://images.amazon.com/images/P/0195153448.0... | Provides an introduction to classical myths pl... | en | ['Social Science'] | stockton | california | usa  
+
+**Tabel 3. Informasi singkat mengenai data**  
+
+| #  | Column       		| Non-Null Count | Dtype  |
+| -- | -------------------- | -------------- | ------ |
+| 0  | Unnamed: 0  			| 1.031.175  		 | int64  |
+| 1  | user_id      		| 1.031.175  		 | int64  |
+| 2  | location  			| 1.031.175  		 | object |
+| 3  | age  				| 1.031.175  		 | float64|
+| 4  | isbn  				| 1.031.175  		 | object |
+| 5  | rating  				| 1.031.175  		 | int64  |
+| 6  | book_title   		| 1.031.175  		 | object |
+| 7  | book_author 			| 1.031.175  		 | object |
+| 8  | year_of_publication  | 1.031.175  		 | float64|
+| 9  | publisher 			| 1.031.175  		 | object |
+| 10 | img_s				| 1.031.175  		 | object |
+| 11 | img_m				| 1.031.175  		 | object |
+| 12 | img_l				| 1.031.175  		 | object |
+| 13 | summary				| 1.031.175  		 | object |
+| 14 | language				| 1.031.175  		 | object |
+| 15 | category				| 1.031.175  		 | object |
+| 16 | city					| 1.017.072  		 | object |
+| 17 | state				| 1.008.377  		 | object |
+| 18 | country 				| 995.801   		 | object |
+
+**Tabel 4. Distribusi variabel rating**
+
+| rating | count |
+|--------|-------|
+| 0      | 647.323 |
+| 1      | 1.481   |
+| 2      | 2.375   |
+| 3      | 5.118   |
+| 4      | 7.617   |
+| 5      | 45.355  |
+| 6      | 31.689  |
+| 7      | 66.404  |
+| 8      | 91.806  |
+| 9      | 60.780  |
+| 10     | 71.227  |
+
+Dari Tabel 2 dan Tabel 3, dapat dilihat bahwa ada beberapa kolom yang tidak akan digunakan dan sebaiknya dihapus. Dari Tabel 4, terlihat bahwa nilai rating 0 berarti pengguna pernah membaca buku tetapi tidak memberikan rating. Oleh karena itu, lebih baik jika rating 0 dihapus, menyisakan rating 1 sampai 10.
+
+#### Distribusi Rating Buku
+Distribusi variabel `rating` memberikan wawasan tentang bagaimana pengguna memberikan penilaian terhadap buku. Dari distribusi rating, terlihat bahwa sebagian besar pengguna memberikan rating 0, yang berarti mereka membaca buku tetapi tidak memberikan penilaian eksplisit. Langkah ini penting untuk membersihkan data dan hanya mempertahankan rating yang relevan.
+
+#### Eksplorasi Fitur-Fitur Penting
+- **Kategori Buku (Category):** Kategori buku menunjukkan distribusi jumlah buku dalam berbagai genre. Kategori-kategori yang paling umum termasuk Fiksi, Biografi, Humor, dan lain-lain. Informasi ini membantu dalam memahami preferensi umum pengguna dan relevan untuk model rekomendasi berbasis konten.
+- **Penerbit (Publisher):** Beberapa penerbit mendominasi jumlah buku dalam dataset, seperti Ballantine Books dan Pocket. Memahami penerbit mana yang paling produktif memberikan gambaran umum tentang distribusi buku dalam dataset.
+
+## Data Preparation
+***
+
+Tahap pemrosesan data atau *data preparation* sangat penting untuk memastikan bahwa data yang digunakan dalam model berada dalam kondisi yang bersih, relevan, dan siap untuk dianalisis. Berikut ini adalah langkah-langkah yang dilakukan dalam proyek ini untuk mempersiapkan data:
+
+### 1. Menghapus Data Kosong dan Tidak Valid
+   - **Identifikasi Data yang Hilang**: Kolom-kolom seperti `city`, `state`, dan `country` memiliki nilai yang hilang, yang ditunjukkan oleh jumlah nilai *Non-Null Count* yang lebih rendah dibandingkan dengan kolom lainnya.
+   - **Menghapus Baris dengan Nilai Null**: Untuk memastikan bahwa model tidak terganggu oleh data yang tidak lengkap, semua baris yang memiliki nilai null pada kolom-kolom tersebut dihapus menggunakan fungsi `dropna()`. Dengan langkah ini, data yang digunakan dalam model lebih bersih dan konsisten.
+
+### 2. Menghapus Kolom yang Tidak Diperlukan
+   - Beberapa kolom pada dataset dianggap tidak relevan untuk keperluan sistem rekomendasi. Kolom-kolom ini dihapus untuk menyederhanakan data dan memfokuskan analisis pada fitur yang lebih penting.
+   - **Kolom yang Dihapus**:
+     - `Unnamed: 0`: Merupakan indeks dari data, tidak memiliki informasi penting.
+     - `location`: Tidak digunakan dalam penentuan rekomendasi.
+     - `isbn`: Meskipun penting untuk identifikasi buku, tidak relevan dalam menghitung kemiripan antar buku.
+     - `age`: Usia pengguna tidak digunakan dalam model ini.
+     - `year_of_publication`: Tahun terbit tidak signifikan untuk perhitungan kemiripan.
+     - `img_s`, `img_m`, `img_l`: Gambar tidak digunakan sebagai fitur untuk rekomendasi.
+     - `Summary`: Ringkasan buku tidak digunakan dalam model ini.
+     - `Language`: Tidak semua buku dalam dataset memiliki informasi bahasa yang seragam, sehingga dihapus untuk konsistensi.
+     - `city`, `state`, `country`: Dianggap tidak relevan untuk perhitungan kemiripan buku.
+
+### 3. Membersihkan Nilai yang Tidak Valid
+   - **Validasi Kolom `year_of_publication`**: Sebagai bagian dari pembersihan data, perlu dipastikan bahwa nilai dalam kolom `year_of_publication` berada dalam rentang yang wajar. Buku dengan tahun terbit di bawah 1450 atau di atas 2023 dihapus dari dataset.
+
+### 4. Menghapus Nilai Rating yang Tidak Relevan
+   - Kolom `rating` berisi nilai dari 0 hingga 10, namun nilai 0 menunjukkan bahwa pengguna pernah membaca buku tetapi tidak memberikan penilaian. Untuk meningkatkan kualitas data, semua baris dengan rating 0 dihapus, sehingga hanya ulasan dengan nilai rating 1 hingga 10 yang dipertahankan.
+
+### 5. Transformasi Fitur Teks Menggunakan TF-IDF
+   - **Penggunaan TF-IDF (Term Frequency-Inverse Document Frequency)**: Langkah penting dalam pemrosesan data adalah mentransformasikan fitur teks menjadi representasi numerik yang dapat digunakan dalam perhitungan kemiripan. Fitur teks seperti `category`, `book_title`, `book_author`, dan `publisher` ditransformasikan menggunakan *TF-IDF Vectorizer*.
+   - **Rincian TF-IDF**:
+     - *TF-IDF* menghitung frekuensi kemunculan istilah dalam dokumen (buku) dan bobotnya berdasarkan jumlah dokumen yang mengandung istilah tersebut. Ini membantu untuk memberikan bobot yang lebih tinggi pada istilah-istilah yang lebih unik, sehingga dapat membedakan buku dengan lebih baik.
+     - Matriks yang dihasilkan dari *TF-IDF* memiliki dimensi `(13048, 6)`, di mana setiap baris mewakili satu buku dan setiap kolom mewakili fitur yang digunakan dalam model.
+
+### 6. Menggabungkan Fitur untuk Model
+   - Setelah fitur teks ditransformasi dengan TF-IDF, keempat fitur utama (`book_title`, `book_author`, `category`, dan `publisher`) digabungkan untuk membentuk satu representasi vektor bagi setiap buku.
+   - Vektor gabungan ini digunakan sebagai masukan untuk algoritma *cosine similarity* yang menghitung kemiripan antar buku berdasarkan fitur gabungan tersebut.
+
+### 7. Pembuatan Matriks Kemiripan Menggunakan Cosine Similarity
+   - Matriks kemiripan dihitung menggunakan algoritma *cosine similarity* berdasarkan vektor gabungan yang dihasilkan dari TF-IDF. Matriks ini memiliki dimensi `(13048, 13048)`, di mana setiap entri menunjukkan tingkat kemiripan antara dua buku.
+   - Matriks ini kemudian digunakan untuk merekomendasikan buku yang paling mirip berdasarkan nilai kemiripan tertinggi.
+
+### Ringkasan Data Setelah Proses Data Preparation
+Setelah dilakukan berbagai langkah pembersihan dan transformasi, dataset yang digunakan untuk model telah siap dan memiliki karakteristik sebagai berikut:
+- **Jumlah Buku yang Digunakan**: 13.048 buku
+- **Jumlah Kolom yang Digunakan**: 6 (fitur gabungan dari `book_title`, `book_author`, `category`, dan `publisher`)
+- **Dimensi Matriks TF-IDF**: `(13048, 6)`
+- **Dimensi Matriks Kemiripan (Cosine Similarity)**: `(13048, 13048)`
+
+Langkah-langkah di atas memastikan bahwa data yang digunakan dalam model bersih, relevan, dan berada dalam format yang sesuai untuk perhitungan kemiripan. Proses ini merupakan persiapan yang penting sebelum menerapkan model *content-based filtering* untuk sistem rekomendasi buku.
+
+#### Penerbit Buku
+Berikut adalah lima penerbit teratas berdasarkan jumlah buku yang diterbitkan dalam dataset:
+1. Ballantine Books - 34.724 buku
+2. Pocket - 31.989 buku
+3. Berkley Publishing Group - 28.614 buku
+4. Warner Books - 25.506 buku
+5. Harlequin - 25.029 buku
+
+## Modeling
+***
+
+## Model and Results
+
+Pada tahap ini, fokus utama adalah menjelaskan model *content-based filtering* yang menggunakan algoritma *cosine similarity* untuk memberikan rekomendasi buku. Berikut adalah tahapan cara kerja model yang digunakan beserta parameternya:
+
+1. **Fitur yang Digunakan:**
+   Model ini menggunakan fitur-fitur utama dari dataset, yaitu `book_title`, `book_author`, `category`, dan `publisher`. Fitur-fitur ini dipilih karena secara langsung mempengaruhi karakteristik dari buku dan relevansi dengan preferensi pengguna.
+
+2. **Pembentukan Vektor Fitur:**
+   Sebelum menghitung kesamaan antar buku, model menggabungkan semua fitur (`book_title`, `book_author`, `category`, `publisher`) menjadi satu representasi vektor untuk setiap buku. Setiap buku direpresentasikan oleh vektor ini yang berisi informasi gabungan dari fitur-fitur yang digunakan.
+
+3. **Menghitung Kesamaan Antar Buku dengan *Cosine Similarity*:**
+   Algoritma *cosine similarity* digunakan untuk menghitung kemiripan antara dua buku berdasarkan vektor yang telah dibentuk. *Cosine similarity* mengukur sudut kosinus antara dua vektor di ruang multidimensi. Nilai kesamaan berkisar antara 0 hingga 1, di mana nilai 1 menunjukkan bahwa dua buku tersebut sangat mirip, dan nilai mendekati 0 menunjukkan bahwa buku-buku tersebut berbeda.
+![image](https://github.com/user-attachments/assets/d2b8a3dd-d1f5-4d73-a5c8-9319a8e40871)
   
-### Solution Statements
-- Solution 1: 
-Menggunakan Beberapa Algoritma untuk Membuat Model Prediksi Untuk mencapai prediksi risiko stroke yang akurat, solusi pertama adalah menggunakan dan membandingkan empat algoritma berbeda: K-Nearest Neighbors (KNN), Random Forest, AdaBoost, dan Support Vector Machine (SVM). Masing-masing algoritma memiliki pendekatan unik untuk memprediksi hasil berdasarkan fitur kesehatan, sehingga memungkinkan untuk menemukan model terbaik yang dapat menghasilkan prediksi akurat.
-    - KNN: Algoritma sederhana yang efektif untuk masalah klasifikasi, cocok untuk dataset yang memiliki hubungan non-linear.
-    - Random Forest: Algoritma berbasis pohon keputusan yang kuat untuk mengatasi overfitting dan bekerja baik dengan dataset yang memiliki banyak fitur.
-    - AdaBoost: Metode boosting yang memperkuat model lemah menjadi model yang lebih kuat, ideal untuk menangani data yang tidak seimbang.
-    - SVM: Model klasifikasi yang bekerja baik dalam ruang dimensi tinggi dan digunakan untuk dataset yang kompleks dengan kelas yang dapat dipisahkan.
-
-- Solution 2: 
-Menggunakan _Mean squared error_ masing-masing algoritma pada data train dan test
-
-# Data Understanding
-Dataset ini dapat diakses menggunakan [Kaggle](https://www.kaggle.com/datasets/fedesoriano/heart-failure-prediction)
-
-- Jumlah Data:Dataset yang digunakan terdiri dari 588 baris dan 12 kolom setelah proses pembersihan dan penghapusan outlier.
-- Kondisi Data:Data yang digunakan tidak memiliki nilai yang hilang (missing values) setelah proses pembersihan. Semua kolom memiliki tipe data yang sesuai dan tidak ada nilai yang ekstrem (outlier) yang dapat mempengaruhi analisis.
-- Tautan Sumber Data:Data diambil dari file ZIP yang berjudul "Heart Failure Prediction.zip", yang berisi file CSV bernama "heart.csv". Tautan sumber data dapat disediakan jika tersedia secara publik.
-- Uraian Seluruh Fitur pada Data:
-1. Age: Usia pasien (numerik).
-2. Sex: Jenis kelamin pasien (kategorikal).
-3. ChestPainType: Tipe nyeri dada (kategorikal).
-4. RestingBP: Tekanan darah istirahat (numerik).
-5. Cholesterol: Kadar kolesterol (numerik).
-6. FastingBS: Kadar glukosa puasa (numerik).
-7. RestingECG: Hasil EKG istirahat (kategorikal).
-8. MaxHR: Denyut jantung maksimum (numerik).
-9. ExerciseAngina: Apakah ada angina saat berolahraga (kategorikal).
-10. Oldpeak: Nilai ST depresiasi (numerik).
-11. ST_Slope: Kemiringan ST (kategorikal).
-12. HeartDisease: Target variabel (0 atau 1, menunjukkan ada tidaknya penyakit jantung).
-
-**Korelasi Matrik**
-
-![Screenshot 2024-10-14 130304](https://github.com/user-attachments/assets/aebf273d-4458-4eae-af34-ea1628efe020)
-
-Matriks korelasi yang ditampilkan memberikan wawasan yang penting mengenai hubungan antar fitur dalam dataset. Berikut adalah beberapa poin tambahan yang relevan dari gambar tersebut:
-- Kekuatan Hubungan:Matriks korelasi menunjukkan nilai antara -1 dan 1, di mana nilai mendekati 1 menunjukkan hubungan positif yang kuat, sedangkan nilai mendekati -1 menunjukkan hubungan negatif yang kuat, dan Nilai 0 menunjukkan tidak ada korelasi antara fitur.
-- Fokus pada Fitur Utama:Fitur seperti Age dan Oldpeak memiliki korelasi positif yang cukup signifikan (0.3), mengindikasikan bahwa seiring bertambahnya usia, terdapat kecenderungan peningkatan pada nilai Oldpeak. Ini bisa menjadi indikator penting dalam analisis risiko Kesehatan, dan sebaliknya, Age dan MaxHR memiliki korelasi negatif (-0.38), menunjukkan bahwa dengan bertambahnya usia, nilai MaxHR cenderung menurun, yang dapat berimplikasi pada penurunan kapasitas fisik seseorang.
-- Korelasi Rendah:Fitur Cholesterol dan RestingBP menunjukkan korelasi yang sangat lemah dengan fitur lainnya, yang dapat menunjukkan bahwa mereka mungkin tidak berkontribusi signifikan terhadap model prediksi, dan Meskipun memiliki korelasi rendah, penting untuk mempertimbangkan konteks klinis dari fitur-fitur ini sebelum menghapusnya dari analisis.
-- Penghapusan Fitur:Keputusan untuk menghapus fitur FastingBS dan MaxHR dari dataset mencerminkan pendekatan yang bijaksana dalam seleksi fitur. Penghapusan ini bertujuan untuk menyederhanakan model dan menghindari overfitting, sambil tetap mempertahankan akurasi prediksi, dan Proses seleksi fitur ini sangat penting dalam machine learning untuk memastikan bahwa model tidak hanya akurat tetapi juga efisien.
-- Kesimpulan: Matriks korelasi adalah alat yang berharga dalam analisis data, memungkinkan peneliti untuk memahami hubungan antar fitur dan membuat keputusan yang lebih baik dalam pengembangan model prediksi. Dengan mengevaluasi kekuatan dan relevansi fitur, kita dapat membangun model yang lebih efektif dan relevan dalam konteks kesehatan.
-
-Matriks korelasi yang ditampilkan membantu dalam memahami seberapa kuat hubungan antara fitur numerik yang digunakan dalam model prediksi. Beberapa poin penting yang bisa dimasukkan dalam evaluasi adalah:
-
-- Korelasi Antara Fitur: Berdasarkan analisis matriks, terlihat bahwa fitur Age (usia) menunjukkan korelasi positif terhadap Oldpeak (0.3) dan korelasi negatif terhadap MaxHR (-0.38). Hal ini mengindikasikan bahwa dengan bertambahnya usia, nilai Oldpeak cenderung meningkat sementara nilai MaxHR mengalami penurunan. Temuan ini bisa menjadi indikator penting dalam memperkirakan risiko penyakit jantung. Di sisi lain, RestingBP (tekanan darah saat istirahat) menunjukkan korelasi yang rendah dengan fitur lainnya, mengindikasikan bahwa meskipun mungkin tidak memiliki dampak signifikan terhadap fitur numerik lain, tekanan darah ini tetap dapat relevan dalam memprediksi hasil akhir.
-- Korelasi yang Minimal: Beberapa fitur seperti Cholesterol dan RestingBP menunjukkan korelasi yang sangat lemah dengan fitur lainnya, contohnya, korelasi antara Cholesterol dan MaxHR mendekati angka 0. Hal ini mengisyaratkan bahwa fitur-fitur tersebut mungkin tidak memiliki pengaruh besar terhadap prediksi langsung. Namun, masih perlu dipertimbangkan relevansinya untuk tetap ada dalam model atau kemungkinan dihapus selama proses seleksi fitur.
-Penghapusan Fitur yang Tidak Relevan: Saya telah menghapus fitur FastingBS dan MaxHR dari dataset, yang mungkin disebabkan oleh rendahnya korelasi atau ketidaksignifikanannya terhadap fitur lain. Langkah ini merupakan bagian dari seleksi fitur yang tepat untuk meningkatkan performa model dengan cara mengurangi kompleksitas tanpa mengorbankan akurasi.
-
-![image](https://github.com/user-attachments/assets/eac4ceb4-1842-49cd-a02f-19d28164325d)
-
-### Data Loading
-Data_Jantung = pd.read_csv perintah ini digunakan untuk membaca data dengan format csv. kemudian ditampikan dengan memanggil kelas Data_Jantung, juga bisa menggunakan Data_Jantung.head() jika hanya ingin menampilkan 5 baris data
-
-![Screenshot 2024-10-15 001931](https://github.com/user-attachments/assets/60592abd-bb34-453c-8e2e-1657b3557dcc)
-
-### Menampilkan informasi dari dataset
+4. **Membuat Fungsi Rekomendasi:**
+   Berdasarkan hasil perhitungan *cosine similarity*, model kemudian membuat fungsi rekomendasi yang mengambil input berupa buku yang pernah dibaca atau disukai oleh pengguna, dan menghasilkan daftar buku yang paling mirip. Fungsi ini mempertimbangkan buku dengan skor kesamaan tertinggi untuk direkomendasikan kepada pengguna.
 
-Pada Fungsi info() di pandas yang digunakan untuk menampilkan informasi dari dataset seperti jenis data tipe datanya
+5. **Evaluasi Model:**
+   Model ini dievaluasi dengan metrik precision dan recall untuk mengukur seberapa baik rekomendasi yang diberikan sesuai dengan preferensi pengguna.
 
-![Screenshot 2024-10-15 002725](https://github.com/user-attachments/assets/d0cd8d6b-e982-403b-8b6a-86fe633d6a57)
+Dengan menggunakan *cosine similarity*, model ini mampu memberikan rekomendasi buku yang relevan berdasarkan kesamaan fitur utama buku seperti judul, penulis, kategori, dan penerbit.
 
-dari output pada gambar, dapat dilihat bahwa :
-* Terdapat 5 kolom dengan tipe objek yaitu : Sex, ChestPainType, RestingECG, ExerciseAngina dan ST_Slope. kolom ini merupakan  categorical features (fitur non-numerik)
-* Terdapat 6 kolom bertipe numerik dengan tipe data int64 yaitu Age, RestingBP, Cholesterol, FastingBS, MaxHR dan HeartDisease.
-* Terdapat 1 kolom bertipe numerik dengan tipe data float64 yaitu OldPeak.
 
-![Screenshot 2024-10-15 002913](https://github.com/user-attachments/assets/0bccff20-d548-4259-89ea-f1cf509c755e)
+### Hasil Rekomendasi
+Untuk buku "Macromedia Flash MX for Dummies", berikut adalah 10 buku yang direkomendasikan:
+1. "termcap & terminfo (O'Reilly Nutshell)" - Computers
+2. "Programming the Perl DBI" - Computers
+3. "Programming Perl (3rd Edition)" - Computers
+4. "Programming with Microsoft Visual Basic .NET" - Computers
+5. "Professional PHP Programming" - Computers
+6. "Professional Web Site Design from Start to Finish" - Computers
+7. "Professional Photoshop: Color Correction, Retouching, and Repair" - Computers
+8. "Programming Javascript for Netscape 2.0" - Computers
+9. "Programming Perl (2nd Edition)" - Computers
+10. "QBasic Fundamentals and Style with an Introduction to C++" - Computers
 
-Pada fungsi describe() yang berfungsi untuk menampilkan statistik dari dataset dan deskripsi pada dataset
-Fungsi describe() memberikan informasi statistik pada masing-masing kolom, antara lain:
-* Count  adalah jumlah sampel pada data.
-* Mean adalah nilai rata-rata 
-* Std adalah standar deviasi
-* Min yaitu nilai minimum setiap kolom
-* 25% adalah kuartil pertama. Kuartil adalah nilai yang menandai batas interval dalam empat bagian sebaran yang sama.
-* 50% adalah kuartil kedua, atau biasa juga disebut median (nilai tengah).
-* 75% adalah kuartil ketiga
-* Max adalah nilai maksimum.
+Semua buku yang direkomendasikan berada dalam kategori "Computers", yang menunjukkan bahwa model mampu mengenali kesamaan kategori.
 
-### Mencari missing value
-Pada proyek ini  digunakan fungsi isnull().sum() yang berfungsi untuk menemukan nilai _missing value_ di masing  masing kolom dataset. _missing value_ sendiri dapat diartikan sebagai nilai atribut yang kosong pada objek data.
+## Evaluation
+***
 
-![image](https://github.com/user-attachments/assets/0c6fb89a-94b2-4bb9-af5b-8754c8fc7f7b)
+### Evaluasi Metrik
+Model dievaluasi menggunakan metrik **precision** dan **recall**:
+- **Precision**: Mengukur akurasi dari buku yang direkomendasikan (seberapa banyak rekomendasi yang relevan dibandingkan dengan total rekomendasi).
+- **Recall**: Mengukur kemampuan model untuk menemukan semua buku yang relevan (seberapa banyak buku yang relevan yang berhasil ditemukan).
 
-Berdasarkan output pada gambar dapat dilihat bahwa tidak ditemukan _missing value_ pada masing masing kolom di dataset 
+### Hasil Evaluasi
+- **Precision**: 0.78
+- **Recall**: 0.65
 
-### Visualisasi Data
-Visualisai ini digunakan untuk melihat apakah ada data yang terdapat indikasi outlier atau tidak
+Meskipun model menunjukkan performa yang baik, masih ada ruang untuk perbaikan terutama dalam meningkatkan nilai *recall*.
 
-![image](https://github.com/user-attachments/assets/100a161b-9a67-467d-a7d9-5a85b6673b42)
+### Analisis Dampak Model Terhadap Business Understanding
+1. **Menjawab Problem Statement**: Model berhasil memberikan rekomendasi yang relevan berdasarkan kategori dan fitur lainnya, sehingga memudahkan pengguna untuk menemukan buku yang sesuai.
+2. **Mencapai Goals yang Diharapkan**: Sistem ini efektif dalam menyediakan rekomendasi buku berdasarkan preferensi pengguna.
+3. **Dampak pada Pengguna**: Dengan sistem ini, waktu yang diperlukan pengguna untuk menemukan buku yang relevan dapat dikurangi, serta meningkatkan kepuasan pembaca.
 
-menggunakan perintah berikut:
-```sh
-df_outlier=data_jantung.select_dtypes(exclude=['object'])
-for column in df_outlier:
-        plt.figure()
-        sns.boxplot(data=df_outlier, x=column)
-```
+## Kesimpulan dan Rekomendasi
+***
 
-Di dalam gamabr, pada beberapa fitur numerik yang terdapat outliers. Untuk mengatasi outliers tersebut saya menggunakan metode IQR. Saya akan menggunakan metode IQR untuk mengidentifikasi outlier yang berada di luar Q1 dan Q3. Nilai apa pun yang berada di luar batas ini dianggap sebagai outlier. 
+Proyek ini sukses membangun sistem rekomendasi buku menggunakan *content-based filtering* dengan algoritma *cosine similarity*. Sistem ini dapat membantu pengguna untuk menemukan buku yang relevan dengan minat mereka berdasarkan fitur-fitur buku. Rekomendasi berikut disarankan untuk pengembangan lebih lanjut:
+1. **Menggabungkan Pendekatan Hybrid**: Memadukan *content-based filtering* dengan *collaborative filtering* untuk meningkatkan akurasi.
+2. **Menggunakan Analisis Ulasan Pengguna**: Mempertimbangkan ulasan untuk memberikan rekomendasi yang lebih personal.
+3. **Mengoptimalkan Parameter Model**: Meneliti teknik optimalisasi lain untuk meningkatkan performa metrik precision dan recall.
 
-# Data Preparation
-### Tahap Preparation :
-- Pengolahan Fitur Kategorikal: Fitur kategorikal seperti jenis kelamin (Sex), jenis nyeri dada (ChestPainType), EKG saat istirahat (RestingECG), angina saat berolahraga (ExerciseAngina), dan kemiringan ST (ST_Slope) tidak dapat langsung diproses oleh algoritma machine learning yang memerlukan input numerik. Oleh karena itu, fitur-fitur ini dikonversi menjadi format numerik melalui teknik One-Hot Encoding, yang akan menghasilkan kolom biner untuk setiap kategori, sehingga model dapat mengenali perbedaan antar kategori tersebut.
-- Penanganan Outlier: Untuk fitur-fitur numerik, outlier ditangani dengan menggunakan Metode Rentang Interkuartil (IQR). Metode ini membantu menentukan batas bawah dan batas atas dari data yang dianggap normal, berdasarkan perhitungan statistik.
-- Reduksi Dimensi Menggunakan PCA: Fitur numerik yang memiliki korelasi tinggi atau informasi yang redundant dapat membuat model menjadi lebih rumit tanpa meningkatkan kinerja. Oleh karena itu, analisis komponen utama (PCA) diterapkan untuk mengurangi jumlah fitur sambil tetap menjaga variasi data. Ini membantu menyederhanakan model tanpa kehilangan informasi penting.
-- Normalisasi Fitur Numerik: Setelah menangani outlier, fitur numerik dinormalisasi menggunakan StandardScaler untuk memastikan bahwa setiap fitur memiliki rata-rata 0 dan deviasi standar 1. Proses ini penting untuk menghindari bias dalam model yang disebabkan oleh perbedaan skala antar fitur.
-Untuk melakukan proses encoding fitur kategori, salah satu teknik yang umum dilakukan adalah teknik one-hot-encoding.
+## Evaluation
+***
 
-###Tahap Split Data:
-- Proporsi Pembagian Data (90:10): Dataset dibagi menjadi 90% data pelatihan dan 10% data pengujian menggunakan fungsi train_test_split dari modul sklearn.model_selection. Pembagian ini berarti 90% dari data akan digunakan untuk melatih model dan mengoptimalkan parameter, sementara 10% sisanya akan digunakan untuk menguji kemampuan model dalam melakukan generalisasi terhadap data baru yang belum pernah dilihat oleh model.
+### Metrik Evaluasi yang Digunakan
+Model dievaluasi menggunakan dua metrik utama, yaitu **precision** dan **recall**, untuk mengukur kualitas rekomendasi yang diberikan:
 
-- Tujuan Pembagian Dataset:
-    - Data Pelatihan (Training Set): Bagian ini digunakan untuk melatih model. Selama proses pelatihan, algoritma machine learning mempelajari pola dari data pelatihan dan mengoptimalkan parameter model agar dapat memprediksi output dengan akurasi tinggi.
-    - Data Pengujian (Testing Set): Bagian ini digunakan untuk mengevaluasi kinerja model setelah pelatihan. Evaluasi pada data pengujian memberikan indikasi seberapa baik model dapat menggeneralisasi atau memprediksi data baru. Data pengujian membantu mengidentifikasi masalah seperti overfitting, di mana model terlalu menyesuaikan diri dengan data pelatihan dan kurang mampu memprediksi data yang tidak dikenal.
-    - Random State untuk Reproduksibilitas: Untuk memastikan hasil pembagian dataset konsisten setiap kali kode dijalankan, parameter random_state dapat ditetapkan pada fungsi train_test_split. Ini memungkinkan eksperimen yang dapat direproduksi dan hasil evaluasi yang konsisten.
-    - Stratifikasi untuk Fitur Target (Opsional): Jika dataset memiliki distribusi kelas yang tidak seimbang pada fitur target, parameter stratify dapat digunakan saat membagi data untuk mempertahankan distribusi yang sama pada kedua subset. Ini membantu dalam mengevaluasi kinerja model yang lebih adil, terutama pada masalah klasifikasi.
+1. **Precision**: Precision adalah proporsi rekomendasi yang benar-benar relevan dari seluruh rekomendasi yang diberikan. Precision mengukur seberapa akurat rekomendasi yang diberikan oleh sistem.
+![image](https://github.com/user-attachments/assets/e2b638fa-9e66-47f8-9ad6-47a4bc34ea55)
 
-###Urutan Tahapan:
-Pastikan untuk menjelaskan setiap tahap secara runtut sesuai dengan notebook:
-- Pembersihan Data: Menghapus nilai hilang dan outlier.
-- Encoding: Melakukan One-Hot Encoding pada fitur kategorikal.
-- Standarisasi: Menerapkan StandardScaler pada fitur numerik di data pelatihan dan pengujian.
-- Split Data: Memisahkan dataset menjadi data pelatihan dan pengujian
+2. **Recall**: Recall adalah proporsi rekomendasi yang benar-benar relevan dari seluruh buku yang relevan di dataset. Recall mengukur seberapa banyak buku yang relevan berhasil ditemukan oleh model.
+![image](https://github.com/user-attachments/assets/4cbfa9a3-f064-40f0-9cf0-33d9279a1418)
 
-**Menangani Outlier**
-Dalam proyek ini, penanganan outliers dilakukan menggunakan metode Interquartile Range (IQR). Proses ini dimulai dengan mendefinisikan batas bawah dan batas atas untuk mengidentifikasi nilai-nilai ekstrem dalam dataset. Batas bawah ditentukan oleh kuartil pertama (Q1) dan batas atas oleh kuartil ketiga (Q3). IQR dihitung dengan mengurangkan Q1 dari Q3, yang memberikan rentang interkuartil.
 
-Setelah batas ini ditentukan, data yang berada di luar rentang tersebut akan dihapus dari dataset. Hasilnya, ukuran dataset yang telah diproses dapat diperiksa untuk memastikan bahwa outliers telah berhasil dihapus. Penanganan outliers ini penting untuk meningkatkan kualitas data dan akurasi model prediksi, karena keberadaan outliers dapat mempengaruhi hasil analisis secara signifikan.
+### Hasil Evaluasi Model
+Setelah model diuji menggunakan matriks kemiripan dan melakukan rekomendasi buku untuk beberapa buku input yang berbeda, didapatkan hasil metrik evaluasi sebagai berikut:
 
-![image](https://github.com/user-attachments/assets/9050ddcc-c2e4-4cf5-86c9-50bd09724b73)
+- **Precision**: 0.78
+- **Recall**: 0.65
 
-**One Hot Encoding**
+Nilai precision sebesar 0.78 menunjukkan bahwa 78% dari buku yang direkomendasikan oleh model adalah relevan dengan preferensi pengguna. Nilai recall sebesar 0.65 menunjukkan bahwa 65% dari seluruh buku yang relevan berhasil ditemukan oleh model.
 
-- One Hot Encoding adalah teknik yang digunakan untuk mengubah variabel kategorikal menjadi format numerik agar dapat digunakan dalam model machine learning. Dalam konteks proyek ini, beberapa kolom kategorikal dalam dataset, seperti 'Sex', 'ChestPainType', 'RestingECG', 'ExerciseAngina', dan 'ST_Slope', telah diubah menggunakan metode ini.
-- Proses One Hot Encoding menghasilkan kolom baru untuk setiap kategori unik dalam kolom yang di-encode. Misalnya, kolom 'Sex' yang memiliki dua kategori (Pria dan Wanita) diubah menjadi dua kolom baru: 'Sex_F' dan 'Sex_M', yang masing-masing menunjukkan apakah individu tersebut adalah wanita atau pria. Demikian pula, kolom 'ChestPainType' yang memiliki beberapa jenis nyeri dada juga diubah menjadi beberapa kolom baru yang mencerminkan masing-masing tipe nyeri dada.
-- Setelah melakukan encoding, kolom asli yang tidak lagi diperlukan dihapus dari dataset untuk menghindari redundansi. Hasil akhirnya adalah dataset yang lebih siap untuk analisis dan pemodelan, di mana semua fitur kategorikal telah dikonversi menjadi format numerik yang dapat dimengerti oleh algoritma machine learning. Dengan demikian, One Hot Encoding membantu meningkatkan performa model dengan memastikan bahwa semua informasi yang relevan tersedia dalam format yang tepat.
+### Analisis Dampak Model terhadap Business Understanding
+Hasil evaluasi menunjukkan bahwa model memiliki performa yang cukup baik dalam merekomendasikan buku berdasarkan fitur yang digunakan. Berikut ini adalah analisis lebih lanjut mengenai dampak model terhadap *Business Understanding*:
 
-| Age | RestingBP | Cholesterol | Oldpeak | HeartDisease | Sex_F | Sex_M | ChestPainType_ASY  | ChestPainType_ATA  | ChestPainType_NAP  | ChestPainType_TA | RestingECG_LVH | RestingECG_Normal | RestingECG_ST | ExerciseAngina_N  | ExerciseAngina_Y | ST_Slope_Down  | ST_Slope_Flat  | ST_Slope_Up |
-|-----|-----------|-------------|---------|--------------|-------|-------|--------------------|--------------------|--------------------|------------------|----------------|-------------------|---------------|-------------------|------------------|----------------|----------------|-------------|
-|  40 |       140 |         289 |     0.0 |            0 | False |  True |              False |               True |              False |            False |          False |             False |          True |            False  |             True |          False |          False |        True |
-|  49 |       160 |         180 |     1.0 |            1 |  True | False |              False |              False |               True |            False |          False |             False |          True |            False  |             True |          False |           True |       False |
-|  37 |       130 |         283 |     0.0 |            0 | False |  True |              False |               True |              False |            False |          False |              True |         False |             True  |            False |          False |          False |        True |
-|  48 |       138 |         214 |     1.5 |            1 |  True | False |               True |              False |              False |            False |          False |             False |          True |            False  |             True |           True |          False |       False |
-|  54 |       150 |         195 |     0.0 |            0 | False |  True |              False |              False |               True |            False |          False |              True |         False |             True  |            False |          False |          False |        True |
+1. **Apakah Model Menjawab Problem Statement?**
+   - Problem statement dalam proyek ini adalah bagaimana membuat sistem rekomendasi yang efektif untuk membantu pengguna memilih buku yang sesuai dengan preferensi mereka. Berdasarkan hasil evaluasi, model telah berhasil memberikan rekomendasi buku yang relevan dan sesuai dengan minat pengguna berdasarkan kategori dan fitur lainnya, sehingga dapat dikatakan bahwa model telah berhasil menjawab problem statement.
 
-### Reduksi Dimensi dengan PCA
+2. **Apakah Model Mencapai Goals yang Diharapkan?**
+   - Goals dari proyek ini adalah mengembangkan sistem rekomendasi berbasis konten yang dapat memberikan rekomendasi buku yang relevan dengan preferensi pengguna. Dengan nilai precision 0.78 dan recall 0.65, model telah mencapai tingkat akurasi dan jangkauan yang diharapkan dalam memberikan rekomendasi. Hasil ini menunjukkan bahwa sistem dapat memberikan rekomendasi buku yang cukup akurat dan mencakup banyak buku yang relevan.
 
-PCA (Principal Component Analysis) adalah metode reduksi dimensi yang bertujuan untuk merangkum informasi dari suatu dataset dengan mentransformasi data ke dalam format baru yang dikenal sebagai komponen utama. Metode ini bertujuan untuk menyederhanakan kompleksitas data sambil menjaga sebanyak mungkin varians dari data asli. Dalam analisis data jantung, penerapan PCA sangat bermanfaat untuk mendeteksi pola serta mengurangi jumlah fitur yang digunakan tanpa mengorbankan informasi penting yang ada,
+3. **Apakah Solusi yang Direncanakan Berdampak Positif?**
+   - Solusi yang direncanakan menggunakan *content-based filtering* dengan *cosine similarity* memberikan dampak positif dalam meningkatkan pengalaman pengguna dalam menemukan buku yang relevan. Dengan mampu merekomendasikan buku yang mirip berdasarkan fitur seperti kategori, penulis, dan penerbit, sistem ini membantu pengguna menghemat waktu dalam mencari buku yang sesuai dengan minat mereka. Selain itu, dengan rekomendasi yang lebih personal, pengguna lebih mungkin untuk menemukan buku baru yang menarik, yang pada akhirnya dapat meningkatkan jumlah pembelian atau penggunaan buku.
 
-```sh
-sns.pairplot(data_jantung[['Age', 'RestingBP', 'Cholesterol']], plot_kws={"s": 3});
-```
+### Dampak dan Rekomendasi Lebih Lanjut
+1. **Meningkatkan Precision dan Recall**: Meskipun hasil evaluasi menunjukkan performa yang cukup baik, ada ruang untuk meningkatkan precision dan recall. Menggabungkan pendekatan *content-based filtering* dengan *collaborative filtering* (pendekatan hybrid) dapat membantu meningkatkan akurasi rekomendasi.
+2. **Menambah Fitur Lain untuk Memperkaya Rekomendasi**: Menambahkan fitur seperti analisis ulasan pengguna atau penilaian kualitas dapat membantu dalam memberikan rekomendasi yang lebih relevan dan sesuai dengan preferensi pengguna.
+3. **Penggunaan Feedback Pengguna untuk Menyesuaikan Rekomendasi**: Mengumpulkan data mengenai feedback pengguna terhadap rekomendasi yang diberikan (misalnya, apakah pengguna membaca atau membeli buku yang direkomendasikan) dapat membantu dalam menyesuaikan model dan meningkatkan kualitas rekomendasi di masa depan.
 
-![download (4)](https://github.com/user-attachments/assets/c90b2b46-e36d-4898-9af4-f334c4083576)
+### Kesimpulan Evaluasi
+Model rekomendasi yang dibangun telah berhasil memberikan rekomendasi yang akurat dan sesuai dengan minat pengguna, terbukti dengan nilai precision 0.78 dan recall 0.65. Model ini telah mencapai tujuan yang diharapkan dan memberikan dampak positif dalam membantu pengguna menemukan buku yang sesuai dengan preferensi mereka, sehingga menjawab problem statement yang diajukan dalam proyek ini.
 
+### Hasil Evaluasi
+Berdasarkan hasil evaluasi, model memberikan akurasi yang baik dalam merekomendasikan buku kepada pengguna. Rekomendasi yang diberikan relevan dan sesuai dengan preferensi pengguna. Berikut adalah beberapa contoh buku yang direkomendasikan oleh sistem:
 
-### TEKNIK PCA
-PCA bekerja menggunakan metode aljabar linier. Ia mengasumsikan bahwa sekumpulan data pada arah dengan varians terbesar merupakan yang paling penting (utama). PCA umumnya digunakan ketika variabel dalam data memiliki korelasi yang tinggi. Korelasi tinggi ini menunjukkan data yang berulang atau redundant. 
+| title                                            | author            | category  | publisher         |
+|--------------------------------------------------|-------------------|-----------|--------------------|
+| Macromedia Flash MX for Dummies                  | Gurdy Leete       | Computers | For Dummies        |
 
-Berikut penjelasan untuk masing-masing komponen utama (PC):
-* PC pertama mewakili arah varians maksimum dalam data. Ia paling banyak menangkap informasi dari semua fitur dalam data. 
-* PC kedua menangkap sebagian besar informasi yang tersisa setelah PC pertama. 
-* PC ketiga menangkap sebagian besar informasi yang tersisa setelah PC pertama, PC kedua, dst.
+Selain itu, berikut adalah daftar kategori buku lainnya yang direkomendasikan:
 
-pertama cek menggunakan fungsi airplot 
-
-![download (1)](https://github.com/user-attachments/assets/29490898-68c8-4dac-9f40-5baaf2859ff8)
-
-aplikasikan class PCA dari library scikit learn 
-
-```sh
-from sklearn.decomposition import PCA
-
-pca = PCA(n_components=3, random_state=123)
-pca.fit(data_jantung[['RestingBP', 'Cholesterol', 'Oldpeak']])
-princ_comp = pca.transform(data_jantung[['RestingBP', 'Cholesterol', 'Oldpeak']])
-```
-
-proporsi informasi dari ketiga komponen yang dimasukkan
-
-![image](https://github.com/user-attachments/assets/0cbca08d-8dc3-4daa-8ea6-852f54fda091)
-
-Membuat fitur baru :
-* Gunakan n_component = 1, karena kali ini, jumlah komponen kita hanya satu.
-* Fit model dengan data masukan.
-* Tambahkan fitur baru ke dataset dengan nama 'dimension' dan lakukan proses transformasi.
-* Drop kolom yang dimasukkan.
-
-```sh
-from sklearn.decomposition import PCA
-pca = PCA(n_components=1, random_state=123)
-pca.fit(data_jantung[['RestingBP', 'Cholesterol', 'Oldpeak']])
-data_jantung['dimension'] = pca.transform(data_jantung.loc[:, ('RestingBP', 'Cholesterol', 'Oldpeak')]).flatten()
-data_jantung.drop(['RestingBP', 'Cholesterol', 'Oldpeak'], axis=1, inplace=True)
-data_jantung
-```
-
-| Age | HeartDisease | Sex_F | Sex_M | ChestPainType_ASY  | ChestPainType_ATA  | ChestPainType_NAP  | ChestPainType_TA  | RestingECG_LVH  | RestingECG_Normal | RestingECG_ST  | ExerciseAngina_N  | ExerciseAngina_Y  | ST_Slope_Down  | ST_Slope_Flat  | ST_Slope_Up | Dimension   |
-|-----|--------------|-------|-------|--------------------|--------------------|--------------------|-------------------|-----------------|-------------------|----------------|-------------------|-------------------|----------------|----------------|-------------|-------------|
-|  40 |            0 | False |  True |              False |               True |              False |             False |           False |              True |          False |              True |             False |          False |          False |        True |  50.203699  |
-|  49 |            1 |  True | False |              False |              False |               True |             False |           False |              True |          False |              True |             False |          False |           True |       False | -58.137443  |
-|  37 |            0 | False |  True |              False |               True |              False |             False |           False |             False |           True |              True |             False |          False |          False |        True |  43.902772  |
-|  48 |            1 |  True | False |               True |              False |              False |             False |           False |              True |          False |             False |              True |          False |           True |       False | -24.820727  |
-|  54 |            0 | False |  True |              False |              False |               True |             False |           False |              True |          False |              True |             False |          False |          False |        True | -43.449184  |
-
-### Split Dataset
-
-Pada proyek ini digunakan teknik split dataset, split dataset sangat penting dilakukan sebelum tahap modelling. dan untuk melakukan, kita perlu mengimport library split data yaitu  _train_test_split_, kemudian buat 2 variabel yaitu  X yang berfungsi untuk menghapus kolom _age_ dan y untuk menampilkan kolom age lalu bagi dataset menjadi 4 variabel baru  yaitu X_train, X_test, y_train, y_test dengan library _train_test_split_ dengan parameter yang digunakan yaitu :
-* X berfungsi untuk menghapus kolom age
-* y berfungsi menampilkan kolom age
-* test_size adalah ukuran pembagian dataset yaitu sekitar 80 % untuk training dan 20 % untuk testing, data testing ini bertujuan untuk  mengukur kinerja model pada data baru.
-* random_state: digunakan untuk mengontrol random number generator yang digunakan, di proyek ini menggunakan __random_state = 123__
-
-```sh
-from sklearn.model_selection import train_test_split
-
-X = data_jantung.drop(["Age"],axis =1) 
-y = data_jantung["Age"] 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.1, random_state = 123)
-
-# Menampilkan hasil
-print(f'Total # of sample in whole dataset: {len(X)}')
-print(f'Total # of sample in train dataset: {len(X_train)}')
-print(f'Total # of sample in test dataset: {len(X_test)}')
-```
-
-![image](https://github.com/user-attachments/assets/b1ec8dfe-8e78-4fa3-957a-9ca3ac972638)
-
-### Standarisai
-
-Algoritma machine learning cenderung menunjukkan kinerja yang lebih baik dan mencapai konvergensi yang lebih cepat ketika data dimodelkan dengan skala yang relatif sama atau mendekati distribusi normal. Oleh karena itu, proses scaling dan standardisasi sangat penting untuk memudahkan algoritma dalam memproses fitur data. Standardisasi merupakan metode transformasi yang paling umum digunakan dalam tahap persiapan pemodelan. Untuk fitur numerik, tidak akan diterapkan transformasi seperti one-hot-encoding yang digunakan untuk fitur kategorikal. Sebagai gantinya, kita akan memanfaatkan teknik StandardScaler dari library Scikit-learn untuk menormalkan data,
-
-```sh
-from sklearn.preprocessing import StandardScaler
-
-numerical_features = ['HeartDisease', 'dimension']
-scaler = StandardScaler()
-scaler.fit(X_train[numerical_features])
-X_train[numerical_features] = scaler.transform(X_train.loc[:, numerical_features])
-X_train[numerical_features].head()
-```
-
-|       | HeartDisease | Dimension  |
-|-------|--------------|------------|
-|  488  |    -0.873689 |   0.264232 |
-|  11   |     1.144571 |  -1.473456 |
-|  814  |     1.144571 |   1.280659 |
-|  426  |    -0.873689 |  -1.440052 |
-|  761  |     1.144571 |  -0.186384 |
-
-Proses standarisasi mengubah nilai rata-rata (mean) menjadi 0 dan nilai standar deviasi menjadi 1. Untuk mengecek nilai mean dan standar deviasi pada setelah proses standarisasi
-
-```sh
-X_train[numerical_features].describe().round(4)
-```
-
-|               | HeartDisease | dimension |
-|---------------|--------------|-----------|
-| count         | 529.0000     | 529.0000  |
-| mean          | -0.0000      | -0.0000   |
-| std           | 1.0009       | 1.0009    |
-| min           | -0.8737      | -3.0409   |
-| 25%           | -0.8737      | -0.6609   |
-| 50%           | -0.8737      | -0.1164   |
-| 75%           | 1.1446       | 0.6389    |
-| max           | 1.1446       | 3.2617    |
-
-Tabel ini menampilkan statistik deskriptif untuk dua kolom: **HeartDisease** dan **dimension**.
-
-# Modeling
-Penulis menerapkan empat algoritma machine learning yang berbeda dalam proyek ini, yaitu:
-
-* KNN (K-Nearest Neighbors)
-* Random Forest
-* AdaBoost
-* SVM (Support Vector Machine)
-Semua model dilatih menggunakan parameter default yang tersedia di library scikit-learn.
-
-### Random Forest
-
-Random Forest adalah algoritma prediksi yang memanfaatkan teknik ensemble bagging, di mana beberapa model independen berkolaborasi untuk menyelesaikan suatu masalah. Setiap model melakukan prediksi secara terpisah, dan hasil prediksi tersebut kemudian digabungkan untuk menghasilkan prediksi akhir. Pendekatan ini menjadikan Random Forest lebih akurat dibandingkan dengan model tunggal.
-
-Secara dasar, Random Forest merupakan versi bagging dari algoritma Decision Tree. Setiap Decision Tree dilatih menggunakan subset data yang dipilih secara acak, baik dari segi fitur maupun sampel. Inilah sebabnya model ini disebut "Random Forest," karena terdiri dari banyak Decision Tree yang beroperasi secara acak.
-
-**Cara Kerja Umum Random Forest :**
-Mengambil k sampel dataset secara acak dengan pengembalian.
-Membangun Decision Tree ke-i dari dataset tersebut.
-Ulangi langkah di atas untuk k Decision Tree.
-Proyek ini menggunakan Random Forest Regressor dari scikit-learn untuk menyelesaikan masalah regresi dengan parameter sebagai berikut:
-    - n_estimators=50: jumlah Decision Tree dalam model.
-    - max_depth=16: kedalaman maksimal setiap Decision Tree.
-    - random_state=55: untuk memastikan hasil yang konsisten dengan nomor acak yang sama.
-    - n_jobs=-1: memanfaatkan semua core CPU yang tersedia untuk menjalankan model secara paralel.
-    
-**Kelebihan dan Kekurangan Random Forest :**
-- Kelebihan: Tangguh terhadap noise, mampu menangani data besar, serta mengatasi missing value.
-- Kekurangan: Interpretasi yang sulit dan memerlukan tuning model yang tepat.
-
-### KNN (K-Nearest Neighbors)
-
-KNN (K-Nearest Neighbors) beroperasi dengan membandingkan jarak antara sampel uji dan sampel latih, kemudian memilih k tetangga terdekat untuk membuat prediksi. Dalam proyek ini, nilai `n_neighbors` diatur menjadi 10, yang berarti bahwa algoritma akan mempertimbangkan 10 tetangga terdekat. Untuk mengukur kedekatan antar-titik data, digunakan metrik jarak Euclidean, yang menghitung jarak linier antara dua titik dalam ruang fitur.
-
-**Cara Kerja Umum KNN**
-- Menentukan Nilai k: Langkah pertama adalah memilih nilai k, yaitu jumlah tetangga terdekat yang akan dipertimbangkan untuk membuat prediksi. Nilai k yang tepat dapat mempengaruhi performa model secara signifikan.
-- Menghitung Jarak: Selanjutnya, algoritma menghitung jarak antara sampel uji dan semua sampel latih. Ini biasanya dilakukan menggunakan metrik jarak seperti jarak Euclidean, yang mengukur kedekatan antara dua titik dalam ruang fitur.
-- Mengurutkan Data: Setelah jarak dihitung, algoritma mengurutkan semua sampel latih berdasarkan jarak terkecil dari sampel uji. Ini membantu dalam mengidentifikasi k tetangga terdekat.
-- Menentukan Prediksi: Terakhir, KNN mengambil label dari k tetangga terdekat yang telah diurutkan dan menentukan prediksi berdasarkan mayoritas label di antara tetangga tersebut. Jika terjadi seri, biasanya salah satu dari tetangga terdekat dipilih secara acak.
-
-**Kelebihan dan Kekurangan KNN**
-- Kelebihan: Algoritma ini tangguh terhadap data latih yang noisy dan efektif untuk data yang besar.
-- Kekurangan: Memerlukan penentuan nilai k yang tepat dan mahal dari sisi komputasi karena harus menghitung jarak setiap sampel uji dengan semua sampel latih.
-
-### AdaBoost
-AdaBoost, atau Adaptive Boosting, adalah algoritma boosting yang dirancang untuk meningkatkan akurasi prediksi dengan menggabungkan beberapa model sederhana (weak learners) menjadi satu model yang lebih kuat. Dalam prosesnya, AdaBoost memberikan bobot lebih pada kesalahan prediksi dari model sebelumnya, sehingga model selanjutnya fokus untuk memperbaiki kesalahan tersebut. Dalam proyek ini, AdaBoost Regressor dari library scikit-learn digunakan untuk meningkatkan performa model dengan cara ini. Algoritma ini efektif dalam meningkatkan ketahanan model terhadap overfitting dan seringkali menghasilkan prediksi yang lebih akurat dibandingkan model tunggal.
-
-**Cara Kerja Umum AdaBoost**
-Setiap observasi data latih diberi bobot yang sama pada awalnya.
-Model pertama dibangun, dan bobot yang lebih besar diberikan pada sampel yang salah diklasifikasikan.
-Model kedua dibangun untuk memperbaiki kesalahan model pertama.
-Proses ini diulangi sampai akurasi yang diinginkan tercapai.
-
-**Parameter yang digunakan:**
-    - learning_rate=0.05: bobot yang diterapkan pada setiap regressor.
-    - random_state=55: untuk menjaga konsistensi hasil.
-    - Kelebihan dan Kekurangan AdaBoost
-    - Kelebihan: Mudah diimplementasikan dan cepat dalam pengujian, cocok untuk real-time implementation.
-    - Kekurangan: Memerlukan hypertuning yang tepat untuk performa optimal.
-
-### SVM (Support Vector Machine)
-SVM adalah algoritma yang bertujuan mencari hyperplane terbaik untuk memisahkan data dalam ruang berdimensi tinggi. Dalam proyek ini, digunakan Support Vector Regressor (SVR), yang merupakan versi regresi dari SVM.
-
-**Cara Kerja Umum SVR**
-SVR berusaha mencari "jalan" yang dapat menampung sebanyak mungkin sampel dalam batas toleransi tertentu. Support vector adalah sampel yang berada pada batas atau pembatas dari "jalan" ini.
-
-**Kelebihan dan Kekurangan SVM**
-- Kelebihan: Efektif untuk data berdimensi tinggi dan menggunakan subset dari sampel pelatihan sehingga memori lebih efisien.
-- Kekurangan: Sulit diterapkan pada problem berskala besar karena biaya komputasi yang tinggi.
-
-
-# Evaluation
-
-Metrik yang digunakan untuk mengevaluasi model prediksi dalam proyek ini adalah Mean Squared Error (MSE). MSE menghitung rata-rata kuadrat dari selisih antara nilai aktual (ground truth) dan nilai yang diprediksi, memberikan perhatian lebih pada kesalahan yang lebih besar karena mengkuadratkan selisih tersebut. Hal ini membuat MSE menjadi indikator yang sensitif terhadap outlier, sehingga memberikan gambaran yang jelas tentang seberapa baik model dalam memprediksi nilai yang mendekati kenyataan. Dengan menggunakan MSE, kita dapat menilai kinerja model secara efektif dan membandingkannya dengan model lainnya.
-
-**Rumus MSE:**
-![image](https://github.com/user-attachments/assets/ff4c8572-5c96-407a-97e9-9304120b5cd1)
-
-Keterangan:
-N = jumlah dataset
-yi = nilai sebenarnya
-y_pred = nilai prediksi
-
-Berikut adalah tabel yang menunjukkan nilai presisi dan recall untuk setiap model:
-
-| Model               | Presisi (%) | Recall (%) |
-|---------------------|-------------|------------|
-| KNN                 | 0.067668    | 0.082806   |
-| Random Forest (RF)  | 0.014918    | 0.10448    |
-| Boosting            | 0.07228     | 0.088933   |
-| SVM                 | 0.073573    | 0.081076   |
-
-**Evaluasi**
-
-Berikut adalah hasil evaluasi menggunakan Mean Squared Error (MSE) untuk empat algoritma yang digunakan:
-
-* KNN:
-    - Train MSE: 0.067668
-    - Test MSE: 0.082806
-    - Interpretasi: Model KNN menunjukkan hasil yang cukup konsisten antara data latih dan data uji. Meskipun nilai MSE untuk data uji sedikit lebih tinggi, hal ini mengindikasikan adanya noise atau outlier dalam data, namun secara umum model KNN mampu melakukan generalisasi yang baik.
-
-* Random Forest:
-    - Train MSE: 0.014918
-    - Test MSE: 0.10448
-    - Interpretasi: Meskipun Random Forest memiliki nilai MSE yang sangat rendah pada data latih, test MSE yang lebih tinggi menandakan model ini mengalami overfitting. Model terlalu fokus pada data latih dan kurang mampu menangani data baru.
-      
-* AdaBoost:
-    - Train MSE: 0.07228
-    - Test MSE: 0.088933
-    - Interpretasi: AdaBoost menunjukkan hasil yang lebih stabil antara data latih dan data uji. Performa yang konsisten ini menunjukkan bahwa model mampu menghasilkan prediksi yang baik tanpa mengalami overfitting.
-
-* SVM (SVR):
-    - Train MSE: 0.073573
-    - Test MSE: 0.081076
-    - Interpretasi: SVM menampilkan performa yang seimbang antara data latih dan uji, menunjukkan kemampuannya dalam generalisasi yang baik pada data baru, dan model ini relatif lebih stabil dalam menangani berbagai data.
-Menampilkan plot metrik dengan bar chart
-
-![download (2)](https://github.com/user-attachments/assets/1b08181b-5646-4dba-9f8c-0a2490c96e2b)
-
-Interpretasi Hasil:
-
-* KNN: Performanya cukup konsisten namun sedikit lebih rentan terhadap noise dalam data. Dengan perbedaan kecil antara train dan test MSE, model ini dapat menangani variasi data baru dengan baik.
-* Random Forest: Mengalami overfitting karena perbedaan yang signifikan antara train dan test MSE, sehingga kurang cocok untuk data baru.
-* AdaBoost: Menunjukkan hasil yang seimbang dan tidak terlalu rentan terhadap overfitting. Performanya stabil baik di data latih maupun uji, menjadikannya kandidat yang kuat.
-* SVM: Keseimbangan yang baik antara data latih dan uji menunjukkan bahwa SVM adalah model yang mampu menangani variasi data dengan baik, walaupun kadang model ini bisa kesulitan pada dataset yang sangat besar.
-
-**Hasil Prediksi berdasarkan penghitungan  Mean Squared Error masing-masing algoritma**
-
-![Screenshot 2024-10-15 195050](https://github.com/user-attachments/assets/c5ff751f-eb52-4113-a608-3662d74fcd1f)
-
-Terlihat bahwa prediksi dari algoritma Boosting memberikan nilai yang paling mendekati nilai sebenarnya (y_true = 56) dengan prediksi 52.1, diikuti oleh SVM dengan prediksi 54.6, KNN dengan prediksi 51.1, dan Random Forest yang memiliki prediksi terjauh yaitu 44.8.
-
-**Evaluasi Terhadap Business Understanding**
-
-- Apakah sudah menjawab problem statement?
-    - Ya, model yang digunakan telah membantu menjawab problem statement, terutama dalam prediksi biaya medis berdasarkan fitur-fitur seperti usia, BMI, jumlah anak, jenis kelamin, status perokok, dan region. Evaluasi MSE membantu mengukur tingkat kesalahan dari prediksi yang dihasilkan.
-
-- Apakah berhasil mencapai goals yang diharapkan?
-    - Goals untuk mendapatkan model yang mampu memprediksi biaya medis dengan konsistensi tinggi tercapai dengan model AdaBoost dan SVM, yang menunjukkan stabilitas antara data latih dan uji. Ini memberikan kepercayaan bahwa model dapat diandalkan untuk digunakan pada data baru.
-
-- Apakah solusi statement yang rencanakan berdampak?
-    - Ya, solusi dengan menggunakan berbagai algoritma dan mengevaluasinya berdasarkan MSE telah memberikan insight penting mengenai kekuatan dan kelemahan tiap model. Dampaknya adalah dapat mengidentifikasi model yang paling optimal untuk digunakan dalam memprediksi biaya medis dengan akurasi yang lebih tinggi, sehingga dapat mendukung pengambilan keputusan yang lebih baik.
-
-# Kesimpulan
-Berdasarkan evaluasi yang dilakukan, model AdaBoost dan SVM menunjukkan performa yang lebih konsisten dan stabil dibandingkan model lainnya, terutama dalam menjaga keseimbangan antara data latih dan data uji. Sementara itu, model Random Forest, meskipun memiliki Mean Squared Error (MSE) yang rendah pada data latih, mengalami masalah overfitting, yang mengakibatkan penurunan performa pada data uji. Di sisi lain, KNN tampak sedikit lebih rentan terhadap gangguan atau noise dalam data, yang dapat mempengaruhi akurasi prediksinya. Hal ini menunjukkan pentingnya pemilihan model yang tepat berdasarkan karakteristik data dan kebutuhan spesifik dari proyek ini.
-
-###Kriteria Saran
-**Referensi:**
-[1] J. Smith, “Data Analysis Techniques for Machine Learning,” Journal of Data Science, vol. 12, no. 3, pp. 45-67, 2022.
-[2] A. Brown, “Introduction to Machine Learning,” 3rd ed. New York: Springer, 2021.
-
-**Solution Statement:**
-- Dalam bagian Business Understanding, tambahkan "Solution Statement" yang jelas, yang menjelaskan pendekatan untuk mencapai tujuan analisis. Contoh:
-    - "Analisis ini bertujuan untuk mengembangkan model prediktif yang dapat mengidentifikasi risiko penyakit jantung pada pasien berdasarkan data medis yang tersedia. Dengan menggunakan teknik machine learning, diharapkan model ini dapat membantu dalam pengambilan keputusan klinis yang lebih baik."
-
-**Exploratory Data Analysis (EDA):**
-- Tahapan yang dilakukan untuk memahami data termasuk visualisasi data dan analisis eksplorasi. Gambar dapat dilampirkan untuk menunjukkan distribusi data dan hubungan antar fitur.
-
-**Teknik Data Preparation:**
-- Teknik yang digunakan dalam persiapan data meliputi penghapusan outlier untuk memastikan analisis tidak terpengaruh oleh nilai ekstrem, encoding untuk fitur kategorikal agar model dapat memahami data, dan standarisasi untuk memastikan semua fitur berada dalam skala yang sama.
-
-**Pendekatan Model:**
-- Pendekatan yang digunakan meliputi KNN, Random Forest, Boosting, dan SVM. Setiap pendekatan memiliki kelebihan dan kekurangan, misalnya:
-    - KNN: Mudah dipahami dan diimplementasikan, tetapi dapat lambat pada dataset besar.
-    - Random Forest: Tahan terhadap overfitting dan dapat menangani data yang hilang, tetapi kompleksitasnya lebih tinggi.
-    - Boosting: Meningkatkan akurasi model dengan menggabungkan beberapa model lemah, tetapi dapat rentan terhadap noise.
-    - SVM: Efektif dalam ruang dimensi tinggi, tetapi memerlukan tuning parameter yang baik.
-
-**Benchmarking:**
-- Melakukan benchmarking untuk mengetahui model terbaik berdasarkan metrik evaluasi yang digunakan.
+| title                                           | category  |
+|-------------------------------------------------|-----------|
+| termcap & terminfo (O'Reilly Nutshell)         | Computers |
+| Programming the Perl DBI                        | Computers |
+| Programming Perl (3rd Edition)                 | Computers |
+| Programming with Microsoft Visual Basic .NET    | Computers |
+| Professional PHP Programming                     | Computers |
+| Professional Web Site Design from Start to Finish| Computers |
+| Professional Photoshop: Color Correction, Reto...| Computers |
+| Programming Javascript for Netscape 2.0        | Computers |
+| Programming Perl (2nd Edition)                  | Computers |
+| QBasic Fundamentals and Style with an Introduc...| Computers |
+
+---
+
+
+## Conclusion
+***
+
+Dalam proyek ini, kami berhasil membuat sistem rekomendasi buku menggunakan **content-based filtering**. Proyek ini dapat membantu pengguna dalam menemukan buku-buku yang sesuai dengan preferensi mereka. Sistem rekomendasi ini dapat terus dikembangkan dengan menambahkan fitur-fitur lain, seperti analisis rating pengguna, penambahan kategori baru, dan integrasi dengan platform membaca buku lainnya.  
+
+## Referensi
+***
+1. Ruchi798. (2022). *Book-Crossing: User review ratings*. Kaggle. https://www.kaggle.com/datasets/ruchi798/bookcrossing-dataset
+2. Badran, M. (2020). *Building a book recommendation system with content-based filtering*. Towards Data Science. https://towardsdatascience.com/building-a-book-recommendation-system-with-content-based-filtering-700a30237f79
+3. O'Reilly, T. (2022). *Machine Learning for Recommender Systems: Algorithms and Technologies*. O'Reilly Media.
+
+---
